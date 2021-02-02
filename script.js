@@ -8,9 +8,9 @@ let score = 0;
 
 const brickRowCount = 9;
 const brickColumnCount = 5;
-const delay = 500; //delay to reset the game
+const delay = 500; //delay pentru a reseta jocul
 
-// Create ball props
+// Creaza mingea
 const ball = {
   x: canvas.width / 2,
   y: canvas.height / 2,
@@ -21,7 +21,7 @@ const ball = {
   visible: true
 };
 
-// Create paddle props
+// Creaza paleta de joc
 const paddle = {
   x: canvas.width / 2 - 40,
   y: canvas.height - 20,
@@ -32,7 +32,7 @@ const paddle = {
   visible: true
 };
 
-// Create brick props
+// Creaza blocurile
 const brickInfo = {
   w: 70,
   h: 20,
@@ -42,7 +42,7 @@ const brickInfo = {
   visible: true
 };
 
-// Create bricks
+// Creaza stivele de blocuri
 const bricks = [];
 for (let i = 0; i < brickRowCount; i++) {
   bricks[i] = [];
@@ -53,7 +53,7 @@ for (let i = 0; i < brickRowCount; i++) {
   }
 }
 
-// Draw ball on canvas
+// Deseneaza mingea pe ecran
 function drawBall() {
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
@@ -62,7 +62,7 @@ function drawBall() {
   ctx.closePath();
 }
 
-// Draw paddle on canvas
+// Deseneaza paleta pe ecran
 function drawPaddle() {
   ctx.beginPath();
   ctx.rect(paddle.x, paddle.y, paddle.w, paddle.h);
@@ -71,13 +71,13 @@ function drawPaddle() {
   ctx.closePath();
 }
 
-// Draw score on canvas
+// Afiseaza scorul jocului
 function drawScore() {
   ctx.font = '20px Arial';
   ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
 }
 
-// Draw bricks on canvas
+// Deseneaza blocurile pe ecran
 function drawBricks() {
   bricks.forEach(column => {
     column.forEach(brick => {
@@ -90,11 +90,11 @@ function drawBricks() {
   });
 }
 
-// Move paddle on canvas
+// Muta paleta pe ecran
 function movePaddle() {
   paddle.x += paddle.dx;
 
-  // Wall detection
+  // Detecteaza dimensiunile ecranului
   if (paddle.x + paddle.w > canvas.width) {
     paddle.x = canvas.width - paddle.w;
   }
@@ -104,24 +104,24 @@ function movePaddle() {
     }
 }
 
-// Move ball on canvas
+// Muta mingea pe ecran
 function moveBall() {
   ball.x += ball.dx;
   ball.y += ball.dy;
 
-  // Wall collision (right/left)
+  // Coliziunea cu peretele (stanga/dreapta)
   if (ball.x + ball.size > canvas.width || ball.x - ball.size < 0) {
     ball.dx *= -1; // ball.dx = ball.dx * -1
   }
 
-  // Wall collision (top/bottom)
+  // Coliziunea cu peretele (sus/jos)
   if (ball.y + ball.size > canvas.height || ball.y - ball.size < 0) {
     ball.dy *= -1;
   }
 
   // console.log(ball.x, ball.y);
 
-  // Paddle collision
+  // Coliziunea paletei
   if (
     ball.x - ball.size > paddle.x &&
     ball.x + ball.size < paddle.x + paddle.w &&
@@ -130,7 +130,7 @@ function moveBall() {
     ball.dy = -ball.speed;
   }
 
-  // Brick collision
+  // Coliziunea blocurilor
   bricks.forEach(column => {
     column.forEach(brick => {
       if (brick.visible) {
@@ -149,14 +149,14 @@ function moveBall() {
     });
   });
 
-  // Hit bottom wall - Lose
+  // Pierzi cand mingea atinge partea de jos a ecranului
   if (ball.y + ball.size > canvas.height) {
     showAllBricks();
     score = 0;
   }
 }
 
-// Increase score
+// Creste scorul
 function increaseScore() {
   score++;
 
@@ -165,7 +165,7 @@ function increaseScore() {
       ball.visible = false;
       paddle.visible = false;
 
-      //After 0.5 sec restart the game
+      //Dupa 0.5 secunde reseteaza jocul
       setTimeout(function () {
           showAllBricks();
           score = 0;
@@ -179,14 +179,14 @@ function increaseScore() {
   }
 }
 
-// Make all bricks appear
+// Afiseaza toate blocurile
 function showAllBricks() {
   bricks.forEach(column => {
     column.forEach(brick => (brick.visible = true));
   });
 }
 
-// Draw everything
+// Deseneaza toate elementele
 function draw() {
   // clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -197,12 +197,12 @@ function draw() {
   drawBricks();
 }
 
-// Update canvas drawing and animation
+// Update canvas desenare si animatie
 function update() {
   movePaddle();
   moveBall();
 
-  // Draw everything
+  // Deseneaza totul
   draw();
 
   requestAnimationFrame(update);
@@ -210,7 +210,7 @@ function update() {
 
 update();
 
-// Keydown event
+// Eveniment keydown
 function keyDown(e) {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
     paddle.dx = paddle.speed;
@@ -219,7 +219,7 @@ function keyDown(e) {
   }
 }
 
-// Keyup event
+// Eveniment keyup
 function keyUp(e) {
   if (
     e.key === 'Right' ||
@@ -231,10 +231,10 @@ function keyUp(e) {
   }
 }
 
-// Keyboard event handlers
+// Tastatura event handlers
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
 
-// Rules and close event handlers
+// Reguli si inchide event handlers
 rulesBtn.addEventListener('click', () => rules.classList.add('show'));
 closeBtn.addEventListener('click', () => rules.classList.remove('show'));
