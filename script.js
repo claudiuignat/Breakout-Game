@@ -10,6 +10,19 @@ const brickRowCount = 9;
 const brickColumnCount = 5;
 const delay = 500; //delay pentru a reseta jocul
 
+// Deseneaza blocurile pe ecran
+function drawBricks() {
+  bricks.forEach(column => {
+    column.forEach(brick => {
+      ctx.beginPath();
+      ctx.rect(brick.x, brick.y, brick.w, brick.h);
+      ctx.fillStyle = brick.visible ? '#0095dd' : 'transparent';
+      ctx.fill();
+      ctx.closePath();
+    });
+  });
+}
+
 // Creaza mingea
 const ball = {
   x: canvas.width / 2,
@@ -75,19 +88,6 @@ function drawPaddle() {
 function drawScore() {
   ctx.font = '20px Arial';
   ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
-}
-
-// Deseneaza blocurile pe ecran
-function drawBricks() {
-  bricks.forEach(column => {
-    column.forEach(brick => {
-      ctx.beginPath();
-      ctx.rect(brick.x, brick.y, brick.w, brick.h);
-      ctx.fillStyle = brick.visible ? '#0095dd' : 'transparent';
-      ctx.fill();
-      ctx.closePath();
-    });
-  });
 }
 
 // Muta paleta pe ecran
